@@ -3,13 +3,14 @@
 pub mod day1;
 pub mod day2;
 pub mod day3;
+pub mod day4;
 
 use std::{
     env,
     path::PathBuf
 };
 
-fn print_result<T: std::fmt::Display>(result: Result<T, &'static str>) {
+fn print_result<T: std::fmt::Display, E: std::fmt::Display>(result: Result<T, E>) {
     match result {
         Ok(x) => println!("\t{}", x),
         Err(e) => println!("\tERROR: {}", e)
@@ -41,4 +42,7 @@ fn main() {
 
     println!("Day 3, part 2 ...");
     print_result(day3::run_part2(&data_dir));
+    
+    println!("Day 4 ...");
+    print_result(day4::run(&data_dir));
 }
