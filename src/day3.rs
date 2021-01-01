@@ -38,19 +38,19 @@ impl Row {
     }
 }
 
-struct Slope {
+struct Hill {
     rows: Vec<Row>,
 }
 
-impl Slope {
-    fn read_file(fname: PathBuf) -> Result<Slope, &'static str> {
+impl Hill {
+    fn read_file(fname: PathBuf) -> Result<Hill, &'static str> {
         let file = File::open(fname)
             .map_err(|_| "Couldn't open the file")?;
         let rows = BufReader::new(file)
             .lines()
             .map(|r| r.map(|l| Row::from_str(&l)).map_err(|_| "Couldn't read line").flatten())
             .collect::<Result<Vec<Row>, _>>()?;
-        Ok(Slope { rows: rows })
+        Ok(Hill { rows: rows })
     }
 
     fn num_trees_hit(&self, down: usize, right: usize) -> usize {
@@ -68,9 +68,21 @@ impl Slope {
 }
 
 pub fn run(data_dir: &PathBuf) -> Result<String, &'static str> {
-    let slope = Slope::read_file(data_dir.join("day3-input.txt"))
+    let hill = Hill::read_file(data_dir.join("day3-input.txt"))
         .map_err(|_| "Couldn't read file")?;
-    Ok(format!("{}", slope.num_trees_hit(1, 3)))
+    Ok(format!("{}", hill.num_trees_hit(1, 3)))
+}
+
+pub fn run_part2(data_dir: &PathBuf) -> Result<String, &'static str> {
+    let hill = Hill::read_file(data_dir.join("day3-input.txt"))
+        .map_err(|_| "Couldn't read file")?;
+    let trees_hit = vec![hill.num_trees_hit(1, 1),
+                         hill.num_trees_hit(1, 3),
+                         hill.num_trees_hit(1, 5),
+                         hill.num_trees_hit(1, 7),
+                         hill.num_trees_hit(2, 1)];
+    let n: usize = trees_hit.iter().product();
+    Ok(format!("{}", n))
 }
 
 #[cfg(test)]
@@ -79,19 +91,42 @@ mod tests {
 
     #[test]
     fn test_num_trees_hit() {
-        let slope = Slope { rows: vec![Row::from_str("..##.......").unwrap(),
-                                       Row::from_str("#...#...#..").unwrap(),
-                                       Row::from_str(".#....#..#.").unwrap(),
-                                       Row::from_str("..#.#...#.#").unwrap(),
-                                       Row::from_str(".#...##..#.").unwrap(),
-                                       Row::from_str("..#.##.....").unwrap(),
-                                       Row::from_str(".#.#.#....#").unwrap(),
-                                       Row::from_str(".#........#").unwrap(),
-                                       Row::from_str("#.##...#...").unwrap(),
-                                       Row::from_str("#...##....#").unwrap(),
-                                       Row::from_str(".#..#...#.#").unwrap()] };
-        let n = slope.num_trees_hit(1, 3);
+        let hill = Hill { rows: vec![Row::from_str("..##.......").unwrap(),
+                                     Row::from_str("#...#...#..").unwrap(),
+                                     Row::from_str(".#....#..#.").unwrap(),
+                                     Row::from_str("..#.#...#.#").unwrap(),
+                                     Row::from_str(".#...##..#.").unwrap(),
+                                     Row::from_str("..#.##.....").unwrap(),
+                                     Row::from_str(".#.#.#....#").unwrap(),
+                                     Row::from_str(".#........#").unwrap(),
+                                     Row::from_str("#.##...#...").unwrap(),
+                                     Row::from_str("#...##....#").unwrap(),
+                                     Row::from_str(".#..#...#.#").unwrap()] };
+        let n = hill.num_trees_hit(1, 3);
         assert_eq!(n, 7);
+
+    }
+
+    #[test]
+    fn test_num_trees_hit_part2() {
+        let hill = Hill { rows: vec![Row::from_str("..##.......").unwrap(),
+                                     Row::from_str("#...#...#..").unwrap(),
+                                     Row::from_str(".#....#..#.").unwrap(),
+                                     Row::from_str("..#.#...#.#").unwrap(),
+                                     Row::from_str(".#...##..#.").unwrap(),
+                                     Row::from_str("..#.##.....").unwrap(),
+                                     Row::from_str(".#.#.#....#").unwrap(),
+                                     Row::from_str(".#........#").unwrap(),
+                                     Row::from_str("#.##...#...").unwrap(),
+                                     Row::from_str("#...##....#").unwrap(),
+                                     Row::from_str(".#..#...#.#").unwrap()] };
+        let trees_hit = vec![hill.num_trees_hit(1, 1),
+                             hill.num_trees_hit(1, 3),
+                             hill.num_trees_hit(1, 5),
+                             hill.num_trees_hit(1, 7),
+                             hill.num_trees_hit(2, 1)];
+        let n: usize = trees_hit.iter().product();
+        assert_eq!(n, 336);
 
     }
 }
