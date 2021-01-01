@@ -33,6 +33,9 @@ fn main() {
     println!("Day 2 ...");
     print_result(day2::run(&data_dir));
     
+    println!("Day 2, part 2 ...");
+    print_result(day2::run_part2(&data_dir));
+    
     println!("Day 3 ...");
     print_result(day3::run(&data_dir));
 }

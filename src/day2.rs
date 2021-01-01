@@ -31,6 +31,20 @@ impl Policy {
             .sum();
         (self.lb..=self.ub).contains(&letter_count)
     }
+
+    fn is_valid_part2(&self, password: &str) -> bool {
+        if let Some(l) = password.chars().nth((self.lb - 1) as usize) {
+            if let Some(u) = password.chars().nth((self.ub - 1) as usize) {
+                return match (l == self.letter, u == self.letter) {
+                    (true, true) => false,
+                    (true, false) => true,
+                    (false, true) => true,
+                    (false, false) => false
+                }
+            }
+        }
+        false
+    }
 }
 
 fn valid_password(line: String) -> Result<bool, &'static str> {
@@ -43,12 +57,33 @@ fn valid_password(line: String) -> Result<bool, &'static str> {
     }
 }
 
+fn valid_password_part2(line: String) -> Result<bool, &'static str> {
+    if let Some((policy_str, password)) = line.split_once(':') {
+        let policy = Policy::from_str(&policy_str[..]);
+        let password = password.trim_start();
+        policy.map(|p| p.is_valid_part2(password))
+    } else {
+        Err("Failed to interpret line")
+    }
+}
+
 pub fn run(data_dir: &PathBuf) -> Result<String, &'static str> {
     let file = File::open(data_dir.join("day2-input.txt"))
         .map_err(|_| "Couldn't open the file")?;
     BufReader::new(file)
         .lines()
         .map(|x| x.map_err(|_| "Couldn't read line").map(valid_password).flatten())
+        .collect::<Result<Vec<_>, _>>()
+        .map(|v| v.into_iter().filter(|&x| x).count())
+        .map(|x| format!("{}", x))
+}
+
+pub fn run_part2(data_dir: &PathBuf) -> Result<String, &'static str> {
+    let file = File::open(data_dir.join("day2-input.txt"))
+        .map_err(|_| "Couldn't open the file")?;
+    BufReader::new(file)
+        .lines()
+        .map(|x| x.map_err(|_| "Couldn't read line").map(valid_password_part2).flatten())
         .collect::<Result<Vec<_>, _>>()
         .map(|v| v.into_iter().filter(|&x| x).count())
         .map(|x| format!("{}", x))
@@ -75,5 +110,11 @@ mod tests {
     fn test_password_validity() {
         let p = Policy::from_str("3-4 l").unwrap();
         assert!(p.is_valid("absdfhlasdflasdfl"));
+    }
+
+    #[test]
+    fn test_password_validity_2() {
+        let p = Policy::from_str("3-4 l").unwrap();
+        assert!(p.is_valid_part2("abldefghed"));
     }
 }
