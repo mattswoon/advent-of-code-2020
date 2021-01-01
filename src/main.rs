@@ -12,4 +12,7 @@ fn main() {
     println!("Well hello there, let's do the advent of code");
     println!("Day 1 ...");
     println!("\t{}", day1::run(&data_dir));
+
+    println!("Day 1, part 2...");
+    print!("\t{}", day1::run_part2(&data_dir));
 }
