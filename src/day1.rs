@@ -18,33 +18,33 @@ fn read_data(fname: &PathBuf) -> Result<Vec<i32>, &'static str> {
         .map_err(|_| "Trouble parsing the lines into ints")
 }
 
-pub fn run(data_dir: &PathBuf) -> String {
+pub fn run(data_dir: &PathBuf) -> Result<String, &'static str> {
     let fname = data_dir.join("day1-input.txt");
     let numbers = read_data(&fname)
-        .expect("Expected a vec of data");
+        .map_err(|_| "Expected a vec of data")?;
 
     for (x,y) in numbers.iter().cartesian_product(numbers.iter()) {
         if x + y == 2020 {
-            return format!("{}", x * y)
+            return Ok(format!("{}", x * y))
         }
     }
 
-    "Oh shit, fuck, couldn't figure this one out 😬".to_string()
+    Err("Oh shit, fuck, couldn't figure this one out 😬")
 }
 
-pub fn run_part2(data_dir: &PathBuf) -> String {
+pub fn run_part2(data_dir: &PathBuf) -> Result<String, &'static str> {
     let fname = data_dir.join("day1-input.txt");
     let numbers = read_data(&fname)
-        .expect("Expected a vec of data");
+        .map_err(|_| "Expected a vec of data")?;
 
     let triplets = numbers.iter()
         .cartesian_product(numbers.iter()
                            .cartesian_product(numbers.iter()));
     for (x,(y,z)) in triplets {
         if x + y + z == 2020 {
-            return format!("{}", x * y * z)
+            return Ok(format!("{}", x * y * z))
         }
     }
 
-    "Oh shit, fuck, couldn't figure this one out 😬".to_string()
+    Err("Oh shit, fuck, couldn't figure this one out 😬")
 }

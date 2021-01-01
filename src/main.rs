@@ -2,11 +2,19 @@
 
 pub mod day1;
 pub mod day2;
+pub mod day3;
 
 use std::{
     env,
     path::PathBuf
 };
+
+fn print_result<T: std::fmt::Display>(result: Result<T, &'static str>) {
+    match result {
+        Ok(x) => println!("\t{}", x),
+        Err(e) => println!("\tERROR: {}", e)
+    }
+}
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -17,14 +25,14 @@ fn main() {
 
     println!("Well hello there, let's do the advent of code");
     println!("Day 1 ...");
-    println!("\t{}", day1::run(&data_dir));
+    print_result(day1::run(&data_dir));
 
     println!("Day 1, part 2...");
-    println!("\t{}", day1::run_part2(&data_dir));
+    print_result(day1::run_part2(&data_dir));
 
     println!("Day 2 ...");
-    match day2::run(&data_dir) {
-        Ok(s) => println!("\t{}", s),
-        Err(e) => println!("\tERROR: {}", e)
-    };
+    print_result(day2::run(&data_dir));
+    
+    println!("Day 3 ...");
+    print_result(day3::run(&data_dir));
 }
