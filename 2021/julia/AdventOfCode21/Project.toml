@@ -1,0 +1,4 @@
+name = "AdventOfCode21"
+uuid = "bf7430df-7f0f-443b-bfdf-ee813d12a63a"
+authors = ["Tom Watson <tom.watson@kinesis.org>"]
+version = "0.1.0"
