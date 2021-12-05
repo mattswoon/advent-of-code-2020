@@ -53,5 +53,20 @@ run_part1(data_dir::String) = joinpath(data_dir, "day4.txt") |>
     a -> first_winning_board!(a...) |>
     a -> score(a...)
 
+function last_winning_board!(boards::Vector{BingoBoard}, numbers::Vector{Int64})
+    for num in numbers
+        mark!.(boards, num)
+        if (length(boards) == 1) && check(first(boards))
+            return (first(boards), num)
+        end
+        findall(check, boards) |> idxs -> deleteat!(boards, idxs)
+    end
+    nothing
+end
+
+run_part2(data_dir::String) = joinpath(data_dir, "day4.txt") |>
+    read |>
+    a -> last_winning_board!(a...) |>
+    a -> score(a...)
 
 end # module
