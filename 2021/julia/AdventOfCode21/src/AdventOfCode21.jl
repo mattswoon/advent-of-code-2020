@@ -7,6 +7,7 @@ include("./day4.jl")
 include("./day5.jl")
 include("./day6.jl")
 include("./day7.jl")
+include("./day8.jl")
 
 function run(data_dir::String)
     run_bit("Day 1 (part 1)", Day1.run_part1, data_dir)
@@ -23,6 +24,8 @@ function run(data_dir::String)
     run_bit("Day 6 (part 2)", Day6.run_part2, data_dir)
     run_bit("Day 7 (part 1)", Day7.run_part1, data_dir)
     run_bit("Day 7 (part 2)", Day7.run_part2, data_dir)
+    run_bit("Day 8 (part 1)", Day8.run_part1, data_dir)
+    run_bit("Day 8 (part 2)", Day8.run_part2, data_dir)
 end
 
 function run_bit(name::String, func::Function, data_dir::String)
