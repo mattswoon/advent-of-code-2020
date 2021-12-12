@@ -1,0 +1,4 @@
+#!/bin/sh
+
+SRCPATH=$(dirname "$0")/../src
+nim c -r $SRCPATH/aoc2021 $SRCPATH/../../data

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+SRCPATH=$(dirname "$0")/../src
+nim c -d:release $SRCPATH/aoc2021
